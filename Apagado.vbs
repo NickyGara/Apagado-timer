@@ -146,7 +146,7 @@ PS1Code = _
 "    } else {" & vbCrLf & _
 "        $RelojLabel.Foreground = 'White'" & vbCrLf & _
 "    }" & vbCrLf & _
-"    if ($Global:SegundosRestantes -eq 300 -and -not $Global:AvisoMostrado) {" & vbCrLf & _
+"    if ($Global:SegundosRestantes -le 300 -and -not $Global:AvisoMostrado) {" & vbCrLf & _
 "        $Global:AvisoMostrado = $true" & vbCrLf & _
 "        $VentanaAviso.Visibility = 'Visible'" & vbCrLf & _
 "    }" & vbCrLf & _

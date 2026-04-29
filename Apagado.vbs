@@ -12,20 +12,17 @@ Dim WshShell, FSO, StartupFolder, ThisFile, StartupFile
 Set WshShell = CreateObject("WScript.Shell")
 Set FSO      = CreateObject("Scripting.FileSystemObject")
 
-' Ruta de shell:startup resuelta
 StartupFolder = WshShell.SpecialFolders("Startup")
 ThisFile      = WScript.ScriptFullName
 StartupFile   = StartupFolder & "\Apagado.vbs"
 
-' --- AUTO-INSTALACION: si este archivo NO está en Startup, se copia ---
 If LCase(ThisFile) <> LCase(StartupFile) Then
     FSO.CopyFile ThisFile, StartupFile, True
     MsgBox "Instalado correctamente en Inicio de Windows." & vbCrLf & _
-           "El temporizador arrancará automáticamente con cada encendido.", _
-           vbInformation, "Apagado — Instalación completa"
+           "El temporizador arrancara automaticamente con cada encendido.", _
+           vbInformation, "Apagado - Instalacion completa"
 End If
 
-' --- CODIGO POWERSHELL EMBEBIDO ---
 Dim PS1Code
 PS1Code = _
 "Add-Type -AssemblyName PresentationFramework, System.Drawing, WindowsBase" & vbCrLf & _
@@ -92,22 +89,23 @@ PS1Code = _
 "$RelojLabel = $WindowReloj.FindName('RelojText')" & vbCrLf & _
 "$SubLabel   = $WindowReloj.FindName('SubText')" & vbCrLf & _
 "$SubLabel.Text = 'Apagado: ' + $Global:HoraFinal" & vbCrLf & _
-"$WindowReloj.Left = 5" & vbCrLf & _
-"$WindowReloj.Top  = [System.Windows.SystemParameters]::PrimaryScreenHeight - 120" & vbCrLf & _
+"$WindowReloj.Left = 10" & vbCrLf & _
+"$WindowReloj.Top  = [System.Windows.SystemParameters]::PrimaryScreenHeight - 180" & vbCrLf & _
 "" & vbCrLf & _
 "$xmlAviso = @'" & Chr(10) & _
 "<Window xmlns='http://schemas.microsoft.com/winfx/2006/xaml/presentation'" & Chr(10) & _
-"        Title='Aviso' Height='210' Width='420' WindowStartupLocation='CenterScreen'" & Chr(10) & _
+"        xmlns:x='http://schemas.microsoft.com/winfx/2006/xaml'" & Chr(10) & _
+"        Title='Aviso' Height='230' Width='400' WindowStartupLocation='CenterScreen'" & Chr(10) & _
 "        WindowStyle='None' AllowsTransparency='True' Background='Transparent' Topmost='True' Visibility='Hidden'>" & Chr(10) & _
-"    <Border BorderBrush='Gray' BorderThickness='1' CornerRadius='15' Background='#F2111111'>" & Chr(10) & _
-"        <StackPanel VerticalAlignment='Center' HorizontalAlignment='Center' Margin='10'>" & Chr(10) & _
-"            <TextBlock Text='&#x26A0;  FALTAN 5 MINUTOS' Foreground='Yellow' FontSize='20' FontWeight='Bold' HorizontalAlignment='Center' Margin='5'/>" & Chr(10) & _
-"            <TextBlock Text='&#xBF;Qu&#xE9; quer&#xE9;s hacer?' Foreground='White' FontSize='14' Margin='8' HorizontalAlignment='Center'/>" & Chr(10) & _
-"            <UniformGrid Columns='2' Margin='5'>" & Chr(10) & _
-"                <Button Name='BtnExtra5'   Content='+5 min'          Height='40' Margin='5' ..." & Chr(10) & _
-"                <Button Name='BtnSeguir'   Content='Continuar'       Height='40' Margin='5' ..." & Chr(10) & _
-"                <Button Name='BtnCancelar' Content='Cancelar apagado' Height='40' Margin='5' ..." & Chr(10) & _
-"                <Button Name='BtnAhora'    Content='Apagar ahora'    Height='40' Margin='5' ..." & Chr(10) & _
+"    <Border BorderBrush='#555' BorderThickness='1' CornerRadius='15' Background='#F2111111'>" & Chr(10) & _
+"        <StackPanel VerticalAlignment='Center' HorizontalAlignment='Center' Margin='20'>" & Chr(10) & _
+"            <TextBlock Text='FALTAN 5 MINUTOS' Foreground='#F5C518' FontSize='20' FontWeight='Bold' HorizontalAlignment='Center' Margin='0,0,0,6'/>" & Chr(10) & _
+"            <TextBlock Text='Que queres hacer?' Foreground='#AAAAAA' FontSize='13' HorizontalAlignment='Center' Margin='0,0,0,20'/>" & Chr(10) & _
+"            <UniformGrid Rows='2' Columns='2'>" & Chr(10) & _
+"                <Button Name='BtnExtra5'   Content='+5 min'          Height='42' Margin='5' Background='#1a5276' Foreground='White' FontWeight='Bold' BorderThickness='0'/>" & Chr(10) & _
+"                <Button Name='BtnSeguir'   Content='Continuar'       Height='42' Margin='5' Background='#1e8449' Foreground='White' FontWeight='Bold' BorderThickness='0'/>" & Chr(10) & _
+"                <Button Name='BtnCancelar' Content='Cancelar apagado' Height='42' Margin='5' Background='#444444' Foreground='White' FontWeight='Bold' BorderThickness='0'/>" & Chr(10) & _
+"                <Button Name='BtnAhora'    Content='Apagar ahora'    Height='42' Margin='5' Background='#922b21' Foreground='White' FontWeight='Bold' BorderThickness='0'/>" & Chr(10) & _
 "            </UniformGrid>" & Chr(10) & _
 "        </StackPanel>" & Chr(10) & _
 "    </Border>" & Chr(10) & _
@@ -161,12 +159,11 @@ PS1Code = _
 "$timer.Start()" & vbCrLf & _
 "$WindowReloj.ShowDialog() | Out-Null"
 
-' --- ESCRIBIR EL PS1 EN TEMP Y EJECUTARLO OCULTO ---
 Dim TempPS1
 TempPS1 = WshShell.ExpandEnvironmentStrings("%TEMP%") & "\ApagadoTimer.ps1"
 
 Dim FileOut
-Set FileOut = FSO.CreateTextFile(TempPS1, True, True)  ' True = UTF-16, evita problemas con tildes
+Set FileOut = FSO.CreateTextFile(TempPS1, True, True)
 FileOut.Write PS1Code
 FileOut.Close
 

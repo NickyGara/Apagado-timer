@@ -1,5 +1,5 @@
 ' ============================================================
-'  Apagado.vbs  ó  Auto-instalador + Lanzador
+'  Apagado.vbs  ‚Äî  Auto-instalador + Lanzador
 '  Contiene el script PowerShell embebido.
 '  La primera vez que se ejecuta se copia a shell:startup.
 '  Las veces siguientes simplemente lanza el temporizador.
@@ -17,12 +17,12 @@ StartupFolder = WshShell.SpecialFolders("Startup")
 ThisFile      = WScript.ScriptFullName
 StartupFile   = StartupFolder & "\Apagado.vbs"
 
-' --- AUTO-INSTALACION: si este archivo NO est· en Startup, se copia ---
+' --- AUTO-INSTALACION: si este archivo NO est√° en Startup, se copia ---
 If LCase(ThisFile) <> LCase(StartupFile) Then
     FSO.CopyFile ThisFile, StartupFile, True
     MsgBox "Instalado correctamente en Inicio de Windows." & vbCrLf & _
-           "El temporizador arrancar· autom·ticamente con cada encendido.", _
-           vbInformation, "Apagado ó InstalaciÛn completa"
+           "El temporizador arrancar√° autom√°ticamente con cada encendido.", _
+           vbInformation, "Apagado ‚Äî Instalaci√≥n completa"
 End If
 
 ' --- CODIGO POWERSHELL EMBEBIDO ---
@@ -103,12 +103,12 @@ PS1Code = _
 "        <StackPanel VerticalAlignment='Center' HorizontalAlignment='Center' Margin='10'>" & Chr(10) & _
 "            <TextBlock Text='&#x26A0;  FALTAN 5 MINUTOS' Foreground='Yellow' FontSize='20' FontWeight='Bold' HorizontalAlignment='Center' Margin='5'/>" & Chr(10) & _
 "            <TextBlock Text='&#xBF;Qu&#xE9; quer&#xE9;s hacer?' Foreground='White' FontSize='14' Margin='8' HorizontalAlignment='Center'/>" & Chr(10) & _
-"            <StackPanel Orientation='Horizontal' HorizontalAlignment='Center' Margin='5'>" & Chr(10) & _
-"                <Button Name='BtnExtra5'   Content='+5 min'          Width='90'  Height='36' Margin='5' Background='#1a5276' Foreground='White' FontWeight='Bold'/>" & Chr(10) & _
-"                <Button Name='BtnSeguir'   Content='Continuar'       Width='90'  Height='36' Margin='5' Background='#1e8449' Foreground='White' FontWeight='Bold'/>" & Chr(10) & _
-"                <Button Name='BtnCancelar' Content='Cancelar apagado' Width='115' Height='36' Margin='5' Background='#555'    Foreground='White' FontWeight='Bold'/>" & Chr(10) & _
-"                <Button Name='BtnAhora'    Content='Apagar ahora'    Width='100' Height='36' Margin='5' Background='#922b21' Foreground='White' FontWeight='Bold'/>" & Chr(10) & _
-"            </StackPanel>" & Chr(10) & _
+"            <UniformGrid Columns='2' Margin='5'>" & Chr(10) & _
+"                <Button Name='BtnExtra5'   Content='+5 min'          Height='40' Margin='5' ..." & Chr(10) & _
+"                <Button Name='BtnSeguir'   Content='Continuar'       Height='40' Margin='5' ..." & Chr(10) & _
+"                <Button Name='BtnCancelar' Content='Cancelar apagado' Height='40' Margin='5' ..." & Chr(10) & _
+"                <Button Name='BtnAhora'    Content='Apagar ahora'    Height='40' Margin='5' ..." & Chr(10) & _
+"            </UniformGrid>" & Chr(10) & _
 "        </StackPanel>" & Chr(10) & _
 "    </Border>" & Chr(10) & _
 "</Window>" & Chr(10) & _
